@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "205405458352",
+    "project_id": "quantofalta-147ad",
+    "storage_bucket": "quantofalta-147ad.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:205405458352:android:8358f0443a7ec302d85075",
+        "android_client_info": {
+          "package_name": "com.example.quantofalta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "205405458352-d8vdvfus4h5e3r299jn012budtbbn1dd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2gDJPZ3PPfQJFDeJruLwQ7QF2iJT6BEQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "205405458352-d8vdvfus4h5e3r299jn012budtbbn1dd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
