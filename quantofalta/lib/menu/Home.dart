@@ -11,7 +11,7 @@ import 'telas/Materias.dart';
 import 'telas/EditMateria.dart';
 
 class Home extends StatefulWidget {
-  final Usuario usuario;
+   Usuario usuario;
   
   Home({this.usuario});
 
@@ -39,15 +39,32 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
   
   List<Widget> listaTelas = [
-      Materias(),
-      AddMateria(),
+      Materias(widget.usuario),
+      AddMateria(widget.usuario),
       EditMateria(),
   ];
  
     return Scaffold(
-      appBar: AppBar(title: Text('Bem vindo, '+widget.usuario.nome, style: TextStyle(color: Colors.white),),
+      appBar: AppBar(title: Text('Bem vindo, '+widget.usuario.nome, 
+            style: TextStyle(color: Colors.white),),
        backgroundColor: Colors.blue[700], 
-      iconTheme: IconThemeData(color: Colors.black),
+      iconTheme: IconThemeData(color: Colors.redAccent),
+      actions: [
+         Padding(
+          padding: EdgeInsets.only(right: 20.0),
+          child: GestureDetector(
+            onTap: () {
+                      FirebaseAuth auth = FirebaseAuth.instance;
+                      auth.signOut();
+                      Navigator.pushReplacement(context, PageTransition(type: PageTransitionType.rightToLeftWithFade, child: Login()));
+            },
+            child: Icon(
+              Icons.exit_to_app,
+              size: 26.0,
+            ),
+          )
+    ),
+      ],
       
       ),
       body: Column(children: [

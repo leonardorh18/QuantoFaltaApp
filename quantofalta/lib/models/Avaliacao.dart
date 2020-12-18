@@ -1,8 +1,8 @@
 class Avaliacao{
 
-  List<String> nome;
-  List<double> nota;
-  List<double> peso;
+  String nome;
+  double nota;
+  double peso;
 
   Avaliacao({this.nome, this.nota, this.peso});
 

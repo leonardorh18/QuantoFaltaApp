@@ -36,7 +36,7 @@ class LoginAuth{
  }
 
 fazerLogin(Usuario usuario, context){
-  
+    
      failure.loading(context);
     FirebaseAuth auth = FirebaseAuth.instance;
    

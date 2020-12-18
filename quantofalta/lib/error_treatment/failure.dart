@@ -75,10 +75,10 @@ showDialog(
           Fluttertoast.showToast(
           msg: erro,
           toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
+          gravity: ToastGravity.TOP,
           timeInSecForIos: 7,
           fontSize: 20,
-          backgroundColor: Colors.greenAccent[200],
+          backgroundColor: Colors.blueAccent[200],
           textColor: Colors.black);
       
       }
@@ -116,7 +116,7 @@ showDialog(
          showDialog(
                   context: context,
                   builder: (BuildContext context){
-                      return SpinKitThreeBounce(color: Colors.orange[800]);
+                      return SpinKitThreeBounce(color: Colors.blue[800]);
                   }
               );
       

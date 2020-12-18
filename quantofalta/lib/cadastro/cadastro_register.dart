@@ -43,7 +43,6 @@ _cadastrar(Usuario usuario, context) async{
           final FirebaseUser user = await auth.currentUser();
           db.collection("usuarios").document(user.uid).setData(usuario.toMap());
 
-            
               failure.toastError('Cadastrado com sucesso');
               Navigator.pushReplacement(context, PageTransition(type: PageTransitionType.rightToLeft, child: Login()));
            
@@ -54,9 +53,6 @@ _cadastrar(Usuario usuario, context) async{
             Navigator.of(context).pop();
             failure.errorTreatment(e.toString(), context: context);
             
-
-         
-
         });
       
     }
