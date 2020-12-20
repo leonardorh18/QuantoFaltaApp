@@ -45,8 +45,8 @@ class Usuario {
     return avaliacoes;
 
   }
-  Future<String> criarId() async{
-  Firestore db = Firestore.instance;
+  String criarId() {
+
   var rand = new Random();
   var l = new List.generate(10, (_) => rand.nextInt(500));
   String numberId = '';
@@ -54,14 +54,12 @@ class Usuario {
     numberId = numberId + l[i].toString();
   }
   String id = this.id + numberId;
-  QuerySnapshot  snapshot = await db.collection("materias").where('user_id', isEqualTo: id).getDocuments();
-        for (DocumentSnapshot item in snapshot.documents){
-          var dados = item.data;
-          if (dados['id'] == id){
-            await criarId();
-          }
-        }
-        return id;
+  for (int index = 0; index < materias.length; index++){
+    if (materias[index] == id){
+      criarId();
+    }
+  }
+  return id;
 
   }
   Future<List<Materia>> getListMaterias() async {
@@ -96,7 +94,7 @@ class Usuario {
         avali = concat + ";" + avali;
       });
     Firestore db = Firestore.instance;
-    materia.id = await criarId();
+    materia.id = criarId();
     await db.collection("materias").document().setData({
         'nome': materia.nome,
         'npd': avali,
