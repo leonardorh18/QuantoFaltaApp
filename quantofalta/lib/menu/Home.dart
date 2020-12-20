@@ -41,7 +41,7 @@ class _HomeState extends State<Home> {
   List<Widget> listaTelas = [
       Materias(widget.usuario),
       AddMateria(widget.usuario),
-      EditMateria(),
+      EditMateria(widget.usuario),
   ];
  
     return Scaffold(

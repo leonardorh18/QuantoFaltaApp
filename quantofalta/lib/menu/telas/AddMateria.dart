@@ -113,7 +113,7 @@ bool verificaAvaliacoes(){
 addMateria() async{
 
     Materia materia = new Materia();
-    //materia.avaliacoes = new List<Avaliacao>();
+    materia.avaliacoes = new List<Avaliacao>();
     materia.nome = nomeMateria.text;
     for (int index = 0; index < pesos.length; index++){
       Avaliacao av = new Avaliacao(nome: desc[index].text.trim(), nota : 0, peso: double.parse(pesos[index].text.trim()));
@@ -127,7 +127,7 @@ addMateria() async{
   });
   
   f.loading(context);
-  bool added = await widget.usuario.addMateriaFirebase(materia);
+  await widget.usuario.addMateriaFirebase(materia);
   f.loadingClose(context);
 
 }
@@ -151,7 +151,7 @@ showDialog(
                    onPressed: ()  async {
                      
                      if (verificaAvaliacoes()){
-                       addMateria();
+                      await  addMateria();
                        Navigator.of(context).pop();
                      }
                   

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:quantofalta/models/Avaliacao.dart';
 import 'package:quantofalta/models/Materia.dart';
+import 'dart:math';
 
 
 class Usuario {
@@ -30,34 +31,57 @@ class Usuario {
     for (int index = 0; index < splt.length -1; index ++){
         Avaliacao av = Avaliacao();
         var avaliacao = splt[index].split(",");
+
         av.nome = avaliacao[0];
         av.peso = double.parse(avaliacao[1]);
         av.nota = double.parse(avaliacao[2]);
         avaliacoes.add(av);
+        print("-------> "+ av.nome);
+        print("-------> "+ av.peso.toString());
+        print("-------> "+ av.nota.toString());
     }
 
   
     return avaliacoes;
 
   }
-
-  getListMaterias() async {
+  Future<String> criarId() async{
   Firestore db = Firestore.instance;
+  var rand = new Random();
+  var l = new List.generate(10, (_) => rand.nextInt(500));
+  String numberId = '';
+  for (int i = 0; i < l.length; i++){
+    numberId = numberId + l[i].toString();
+  }
+  String id = this.id + numberId;
+  QuerySnapshot  snapshot = await db.collection("materias").where('user_id', isEqualTo: id).getDocuments();
+        for (DocumentSnapshot item in snapshot.documents){
+          var dados = item.data;
+          if (dados['id'] == id){
+            await criarId();
+          }
+        }
+        return id;
+
+  }
+  Future<List<Materia>> getListMaterias() async {
+  Firestore db = Firestore.instance;
+  List<Materia> materias = List<Materia>();
   QuerySnapshot  snapshot = await db.collection("materias").where('user_id', isEqualTo: id).getDocuments();
       for (DocumentSnapshot item in snapshot.documents){
           var dados = item.data;
           var id = item.documentID;
           var npd = dados['npd'];
           List<Avaliacao> av = tratarNpd(npd);
-          this.materias.add(
-            Materia(nome: dados['nome'],avaliacoes: av ),
+          materias.add(
+            Materia(nome: dados['nome'], avaliacoes: av, id: dados['id'] ),
             
           );
-
-
         }
 
+    return materias;
   }
+
   Future<bool> addMateriaFirebase(Materia materia) async{
     String avali = '';
     String concat ;
@@ -72,10 +96,12 @@ class Usuario {
         avali = concat + ";" + avali;
       });
     Firestore db = Firestore.instance;
+    materia.id = await criarId();
     await db.collection("materias").document().setData({
         'nome': materia.nome,
         'npd': avali,
         'user_id': id,
+        'id': materia.id,
     });
     failure.toastError('Cadastrado com sucesso');
     return true;
@@ -108,13 +134,14 @@ class Usuario {
       usuario.nome = snapshot.data['nome'];
       usuario.email = email;
       usuario.id =  id;
-      usuario.materias = List<Materia>();
 
      }catch (e) {
        failure.toastError("Nao foi possivel carregar os dados");
 
      }
-  await  getListMaterias();
+
+  usuario.materias = await getListMaterias();
+  //print("TESTE ----" +usuario.materias[0].avaliacoes[0].nome);
     
   }
    
