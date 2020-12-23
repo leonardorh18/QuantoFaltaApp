@@ -71,10 +71,11 @@ class _CadastroState extends State<Cadastro> {
 
       obscureText: false,
       controller: nomeController,
+      maxLength: 30,
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.person),
-        labelText: "Nome Completo",
-          helperText: "Teu nome completo :)",
+        labelText: "Nome",
+          helperText: "Nome que vai aparecer no app :)",
           filled: true,
           fillColor: Colors.white,
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),

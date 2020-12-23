@@ -195,7 +195,8 @@ attAvaliacoes(Materia materia) async {
     return  Container(
 
         child: Flexible(
-          child: ListView.builder(
+          child: widget.usuario.materias.length == 0 ? Center(child: Text("Nenhuma materia",  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.blueAccent[400]))) :
+           ListView.builder(
             
             itemCount: widget.usuario.materias.length,
             itemBuilder: (context, index){

@@ -7,7 +7,7 @@
          FlutterApplication and put your custom class here. -->
     <application
 
-        android:label="quantofalta"
+        android:label="Quanto Falta"
         android:name="io.flutter.app.FlutterApplication"
         android:icon="@mipmap/ic_launcher">
         <activity
