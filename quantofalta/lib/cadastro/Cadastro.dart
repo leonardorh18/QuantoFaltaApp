@@ -100,7 +100,7 @@ class _CadastroState extends State<Cadastro> {
     final registerButon = Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
-      color: Colors.red[700],
+      color: Colors.blue[700],
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
@@ -117,7 +117,7 @@ class _CadastroState extends State<Cadastro> {
     );
     return  Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.orange[900], 
+        backgroundColor: Colors.blueAccent[400], 
         title: Text("Cadastro"),
       ),
       backgroundColor: Colors.white,

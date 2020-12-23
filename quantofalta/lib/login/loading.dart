@@ -24,7 +24,7 @@ class _LoadingState extends State<Loading> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SpinKitThreeBounce(color: Colors.orange[800]),
+              SpinKitThreeBounce(color: Colors.blue[800]),
             ],
           ) ,
     );
