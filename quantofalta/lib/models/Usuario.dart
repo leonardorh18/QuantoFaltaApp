@@ -25,7 +25,7 @@ class Usuario {
 
   }
 
-  List<Avaliacao> tratarNpd(var npd){
+  List<Avaliacao> tratarNpd(var npd , {bool zerarNotas = false}){
     var splt = npd.split(";");
     List<Avaliacao> avaliacoes = List<Avaliacao>();
     for (int index = 0; index < splt.length -1; index ++){
@@ -34,7 +34,7 @@ class Usuario {
 
         av.nome = avaliacao[0];
         av.peso = double.parse(avaliacao[1]);
-        av.nota = double.parse(avaliacao[2]);
+        av.nota = zerarNotas ? 0 : double.parse(avaliacao[2]);
         avaliacoes.add(av);
         print("-------> "+ av.nome);
         print("-------> "+ av.peso.toString());
@@ -48,14 +48,15 @@ class Usuario {
   String criarId() {
 
   var rand = new Random();
-  var l = new List.generate(10, (_) => rand.nextInt(500));
+  var l = new List.generate(3, (_) => rand.nextInt(99));
   String numberId = '';
   for (int i = 0; i < l.length; i++){
     numberId = numberId + l[i].toString();
   }
-  String id = this.id + numberId;
+  String id = '';
+  id = this.id + numberId;
   for (int index = 0; index < materias.length; index++){
-    if (materias[index] == id){
+    if (materias[index].id == id){
       criarId();
     }
   }
@@ -66,6 +67,7 @@ class Usuario {
   Firestore db = Firestore.instance;
   List<Materia> materias = List<Materia>();
   QuerySnapshot  snapshot = await db.collection("materias").where('user_id', isEqualTo: id).getDocuments();
+ 
       for (DocumentSnapshot item in snapshot.documents){
           var dados = item.data;
           var id = item.documentID;
@@ -95,7 +97,7 @@ class Usuario {
       });
     Firestore db = Firestore.instance;
     materia.id = criarId();
-    await db.collection("materias").document().setData({
+    await db.collection("materias").document(materia.id).setData({
         'nome': materia.nome,
         'npd': avali,
         'user_id': id,
@@ -113,6 +115,70 @@ class Usuario {
    
 
   }
+    Future<bool> attMateria(String id) async{
+    String avali = '';
+    String concat ;
+    Materia materia;
+    print("Atualizando materia no firebase");
+    try {
+    for (int index = 0; index < materias.length; index ++){
+
+      if (materias[index].id == id){
+
+        materia =  materias[index];
+
+      }
+    }
+      print("ID da materia encontrada --->>" + materia.id);
+      materia.avaliacoes.forEach((element) {
+      print(element.nome);
+      print(element.peso);
+      print(element.nota);
+      concat = element.nome + ',' + element.peso.toString() + ',' + element.nota.toString();
+      avali = concat + ";" + avali;
+    });
+    Firestore db = Firestore.instance;
+    await db.collection('materias').document(materia.id).updateData({
+      'npd': avali,
+    });
+
+    failure.toastError('Atualizado com sucesso');
+    return true;
+
+    } catch (e){
+
+        failure.toastError('Erro ao atualizar materia');
+        return false;
+
+    }
+   
+  }
+
+  Future<bool> addMateriaCodigo(String codigo) async {
+    Firestore db = Firestore.instance;
+    DocumentSnapshot snapshot = await db.collection("materias").document(codigo).get();
+    List<Avaliacao> listaav = tratarNpd(snapshot.data['npd'], zerarNotas: true);
+    String id = criarId();
+    this.materias.add(Materia(avaliacoes: listaav, nome: snapshot.data['nome'], id:id));
+    try {
+
+      await db.collection('materias').document(codigo).setData({
+      'nome' : snapshot.data['nome'],
+      'npd' : snapshot.data['npd'],
+      'user_id': this.id,
+      'id': id,
+    });
+    failure.toastError("Materia adiciona com sucesso!");
+    return true;
+    } catch (e){
+
+       failure.toastError("Erro ao adicionar a materia");
+       return false;
+    }
+
+
+  }
+
   Map<String, dynamic> toMap(){
 
     Map <String, dynamic> map = {

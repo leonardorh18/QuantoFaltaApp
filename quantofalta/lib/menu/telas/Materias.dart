@@ -20,10 +20,10 @@ class _MateriasState extends State<Materias> {
   @override
   Widget build(BuildContext context) {
 
-  double total = 0;
+  
   Widget contentDialog(List<Avaliacao> avaliacoes){
+    double total = 0;
   return  Container( 
-
     width: double.maxFinite,
     child: ListView.builder(
                       shrinkWrap: true,
@@ -34,7 +34,7 @@ class _MateriasState extends State<Materias> {
                          return Column(
                            children: [
                              Text(
-                                av.nome + " Nota: " +av.nota.toString() + " Peso: "+ av.peso.toString(), style: TextStyle(color: Colors.grey[600], fontSize: 20),
+                                av.nome + " | Nota: " +av.nota.toString() + " | Peso: "+ av.peso.toString(), style: TextStyle(color: Colors.grey[600], fontSize: 20),
                              ),
                               SizedBox(height: 15,),
                               index == avaliacoes.length -1 ? Text("Media final até agora: "+ total.toString(), style: TextStyle(color: Colors.red[600], fontSize: 20)) : SizedBox(height: 5,)
