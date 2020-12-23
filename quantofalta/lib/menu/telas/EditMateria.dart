@@ -126,7 +126,33 @@ bool verificaAvaliacoes(){
   }
   return true;
 }
+deleteMateria(Materia materia){
+        showDialog(
+              context: context,
+              builder: (BuildContext context){
+                  return AlertDialog(
+                    title: Text("Você deseja excluir essa materia?"),
+                    actions:[
+                      FlatButton(
+                        child: Text("Fechar"),
+                        onPressed: (){
+                        Navigator.of(context).pop();
+                          },
+                      ),
+                      FlatButton(
+                        child: Text("Excluir " + materia.nome),
+                        onPressed: () async{
+                        f.loading(context);
+                        await widget.usuario.deleteMateria(materia);
+                        Navigator.of(context).pop();
+                          },
+                      ),
+                    ],
+                  );
+              }
+          );
 
+}
 attAvaliacoes(Materia materia) async {
   for (int index =0 ; index < materia.avaliacoes.length; index++){
 
@@ -136,7 +162,7 @@ attAvaliacoes(Materia materia) async {
 
   }
   print("ID DA MATERIA --------> "+ materia.id);
-  widget.usuario.attMateria(materia.id);
+  return await widget.usuario.attMateria(materia.id);
 }
     mostrarNotas(Materia materia){
       showDialog(
@@ -203,7 +229,9 @@ attAvaliacoes(Materia materia) async {
                                SizedBox(width: 20,),
                             
                               GestureDetector(
-
+                                onTap: (){
+                                  deleteMateria(materia);
+                                },
                                 child: Icon(Icons.delete, size: 40, color: Colors.red[700],),
                               ),
                              SizedBox(width: 20,),

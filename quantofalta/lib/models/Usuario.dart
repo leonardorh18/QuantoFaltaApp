@@ -25,6 +25,27 @@ class Usuario {
 
   }
 
+  Future<bool> deleteMateria(Materia materia) async{
+    try {
+      
+      Firestore db = Firestore.instance;
+      print("ID DA MATERIA A SER DELETADA ---- "+ materia.id);
+      await db.collection('materias').document(materia.id).delete();
+      this.materias.forEach((m) { 
+        if (m.id == materia.id){
+          this.materias.remove(m);
+        }
+      });
+      failure.toastError("Materia deletada com sucesso!");
+      return true;
+    } catch (e){
+
+      failure.toastError("Erro ao deletar a materia :(");
+      return false;
+
+    }
+
+  }
   List<Avaliacao> tratarNpd(var npd , {bool zerarNotas = false}){
     var splt = npd.split(";");
     List<Avaliacao> avaliacoes = List<Avaliacao>();
@@ -45,41 +66,43 @@ class Usuario {
     return avaliacoes;
 
   }
+
   String criarId() {
 
-  var rand = new Random();
-  var l = new List.generate(3, (_) => rand.nextInt(99));
-  String numberId = '';
-  for (int i = 0; i < l.length; i++){
-    numberId = numberId + l[i].toString();
-  }
-  String id = '';
-  id = this.id + numberId;
-  for (int index = 0; index < materias.length; index++){
-    if (materias[index].id == id){
-      criarId();
+    var rand = new Random();
+    var l = new List.generate(3, (_) => rand.nextInt(99));
+    String numberId = '';
+    for (int i = 0; i < l.length; i++){
+      numberId = numberId + l[i].toString();
     }
-  }
+    String id = '';
+    id = this.id + numberId;
+    for (int index = 0; index < materias.length; index++){
+      if (materias[index].id == id){
+        criarId();
+      }
+    }
   return id;
 
   }
-  Future<List<Materia>> getListMaterias() async {
-  Firestore db = Firestore.instance;
-  List<Materia> materias = List<Materia>();
-  QuerySnapshot  snapshot = await db.collection("materias").where('user_id', isEqualTo: id).getDocuments();
- 
-      for (DocumentSnapshot item in snapshot.documents){
-          var dados = item.data;
-          var id = item.documentID;
-          var npd = dados['npd'];
-          List<Avaliacao> av = tratarNpd(npd);
-          materias.add(
-            Materia(nome: dados['nome'], avaliacoes: av, id: dados['id'] ),
-            
-          );
-        }
 
-    return materias;
+  Future<List<Materia>> getListMaterias() async {
+    Firestore db = Firestore.instance;
+    List<Materia> materias = List<Materia>();
+    QuerySnapshot  snapshot = await db.collection("materias").where('user_id', isEqualTo: id).getDocuments();
+  
+        for (DocumentSnapshot item in snapshot.documents){
+            var dados = item.data;
+            var id = item.documentID;
+            var npd = dados['npd'];
+            List<Avaliacao> av = tratarNpd(npd);
+            materias.add(
+              Materia(nome: dados['nome'], avaliacoes: av, id: dados['id'] ),
+              
+            );
+          }
+
+      return materias;
   }
 
   Future<bool> addMateriaFirebase(Materia materia) async{
@@ -162,7 +185,7 @@ class Usuario {
     this.materias.add(Materia(avaliacoes: listaav, nome: snapshot.data['nome'], id:id));
     try {
 
-      await db.collection('materias').document(codigo).setData({
+      await db.collection('materias').document(id).setData({
       'nome' : snapshot.data['nome'],
       'npd' : snapshot.data['npd'],
       'user_id': this.id,
