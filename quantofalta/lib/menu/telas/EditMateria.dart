@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:quantofalta/error_treatment/failure.dart';
 import 'package:quantofalta/models/Avaliacao.dart';
 import 'package:quantofalta/models/Materia.dart';
 import 'package:quantofalta/models/Usuario.dart';
+
+import '../Home.dart';
 
 
 class EditMateria extends StatefulWidget {
@@ -23,7 +26,7 @@ class _EditMateriaState extends State<EditMateria> {
   List<TextEditingController> desc = List<TextEditingController>();
   List<TextEditingController> notas = List<TextEditingController>();
   int count = 0;
-  String materiaAtual = '';
+
   Failure f = Failure();
   Widget contentDialog(List<Avaliacao> avaliacoes){
   return  Container( 
@@ -145,6 +148,8 @@ deleteMateria(Materia materia){
                         f.loading(context);
                         await widget.usuario.deleteMateria(materia);
                         Navigator.of(context).pop();
+                        Navigator.pushReplacement(context, PageTransition(type: PageTransitionType.leftToRight, child: Home(usuario: widget.usuario, indexAtual: 2)));
+
                           },
                       ),
                     ],
@@ -204,49 +209,69 @@ attAvaliacoes(Materia materia) async {
               return  Padding(
                     padding: EdgeInsets.only(top:15),
                     child:Card(
-                    elevation: 10,
-                    color: Colors.grey[200],
+                    elevation: 15,
+                    color: Colors.blueGrey[50],
                     shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0),
                         ),
                       child: Column(
-                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Text(materia.nome, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.blueAccent),),
-                          SizedBox(height: 10,),
+                          Text(materia.nome, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.lightGreen[700]),),
+                          SizedBox(height: 10, width: 15,),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
+                              SizedBox(height: 10, width: 15),
                               GestureDetector(
                                 onTap: (){
-                                  setState(() {
-                                    materiaAtual = materia.nome;
-                                  });
+
                                   mostrarNotas(materia);
                                 },
                                 child: Icon(Icons.edit, size: 40,),
                               ),
 
                                SizedBox(width: 20,),
+                               Text("Editar", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))
                             
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 10, width: 15),
                               GestureDetector(
                                 onTap: (){
                                   deleteMateria(materia);
                                 },
                                 child: Icon(Icons.delete, size: 40, color: Colors.red[700],),
                               ),
-                             SizedBox(width: 20,),
-                              GestureDetector(
-                                onTap: (){
-                                  Clipboard.setData(ClipboardData(text: materia.id));
-                                  Failure failure = Failure();
-                                  failure.toastError(materia.id + " COPIADO!!");
-                                },
-                                child: Icon(Icons.copy, size: 40, color: Colors.green[700],),
-                              )
+                             SizedBox(width: 20,),   
+                             Text("Deletar", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))                          
+
                             ],
                           ),
+                          Row(
+                            
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                            SizedBox(height: 40, width: 15),
+                              GestureDetector(
+                                onTap: (){
+                                  Clipboard.setData(ClipboardData(text: materia.share_id));
+                                  Failure failure = Failure();
+                                  failure.toastError(materia.share_id + " COPIADO!!");
+                                },
+                                child: Icon(Icons.copy, size: 40, color: Colors.green[700],),
+                              ),
+                            SizedBox(width: 20,),   
+                             Text("Copiar código", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),)                          
+
+
+                          ],),
                           
+                          SizedBox(height: 10 ),
 
                         ],
                       ),

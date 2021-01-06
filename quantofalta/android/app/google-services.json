@@ -14,6 +14,51 @@
       },
       "oauth_client": [
         {
+          "client_id": "205405458352-a613v6e9r7r9co2cmfighlga4dbok2jm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.quantofalta",
+            "certificate_hash": "e1ed45a38d4cd99e5e9cc49c5aa36bc98be71b1e"
+          }
+        },
+        {
+          "client_id": "205405458352-d8vdvfus4h5e3r299jn012budtbbn1dd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2gDJPZ3PPfQJFDeJruLwQ7QF2iJT6BEQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "205405458352-d8vdvfus4h5e3r299jn012budtbbn1dd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:205405458352:android:80d0c2cbb6af1c56d85075",
+        "android_client_info": {
+          "package_name": "com.lhrocha.quantofalta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "205405458352-2di283l5hgfo4i6kn7ug7o6e4be33u0o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lhrocha.quantofalta",
+            "certificate_hash": "e1ed45a38d4cd99e5e9cc49c5aa36bc98be71b1e"
+          }
+        },
+        {
           "client_id": "205405458352-d8vdvfus4h5e3r299jn012budtbbn1dd.apps.googleusercontent.com",
           "client_type": 3
         }

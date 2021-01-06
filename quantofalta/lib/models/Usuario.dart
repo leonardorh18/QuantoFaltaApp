@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:quantofalta/error_treatment/failure.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,16 +33,13 @@ class Usuario {
       Firestore db = Firestore.instance;
       print("ID DA MATERIA A SER DELETADA ---- "+ materia.id);
       await db.collection('materias').document(materia.id).delete();
-      this.materias.forEach((m) { 
-        if (m.id == materia.id){
-          this.materias.remove(m);
-        }
-      });
+      this.materias.removeWhere((element) => element.id == materia.id);
       failure.toastError("Materia deletada com sucesso!");
       return true;
-    } catch (e){
 
-      failure.toastError("Erro ao deletar a materia :(");
+    } catch (e){
+      print(e);
+      failure.toastError("Erro ao deletar a materia :(" );
       return false;
 
     }
@@ -97,7 +96,7 @@ class Usuario {
             var npd = dados['npd'];
             List<Avaliacao> av = tratarNpd(npd);
             materias.add(
-              Materia(nome: dados['nome'], avaliacoes: av, id: dados['id'] ),
+              Materia(nome: dados['nome'], avaliacoes: av, share_id: dados['share_id'], id: id ),
               
             );
           }
@@ -124,6 +123,7 @@ class Usuario {
         'nome': materia.nome,
         'npd': avali,
         'user_id': id,
+        'share_id': materia.id,
         'id': materia.id,
     });
     failure.toastError('Cadastrado com sucesso');
@@ -179,23 +179,30 @@ class Usuario {
 
   Future<bool> addMateriaCodigo(String codigo) async {
     Firestore db = Firestore.instance;
-    DocumentSnapshot snapshot = await db.collection("materias").document(codigo).get();
+    bool done = false;
+    DocumentSnapshot snapshot = await db.collection("materias").document(codigo).get().timeout(Duration(seconds: 5), onTimeout: (){return null;});
+    if (snapshot == null){
+      print("NAO EXISTE ------- >");
+      failure.toastError("Codigo não existe");
+      return false;
+    }
     List<Avaliacao> listaav = tratarNpd(snapshot.data['npd'], zerarNotas: true);
     String id = criarId();
-    this.materias.add(Materia(avaliacoes: listaav, nome: snapshot.data['nome'], id:id));
+    this.materias.add(Materia(avaliacoes: listaav, nome: snapshot.data['nome'], id:id, share_id: codigo));
     try {
 
       await db.collection('materias').document(id).setData({
       'nome' : snapshot.data['nome'],
       'npd' : snapshot.data['npd'],
       'user_id': this.id,
+      'share_id': codigo,
       'id': id,
     });
-    failure.toastError("Materia adiciona com sucesso!");
+
     return true;
     } catch (e){
 
-       failure.toastError("Erro ao adicionar a materia");
+
        return false;
     }
 

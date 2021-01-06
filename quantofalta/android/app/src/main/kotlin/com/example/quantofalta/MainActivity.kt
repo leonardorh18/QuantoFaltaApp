@@ -1,4 +1,4 @@
-package com.example.quantofalta
+package com.lhrocha.quantofalta
 
 import io.flutter.embedding.android.FlutterActivity
 

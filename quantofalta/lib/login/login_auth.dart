@@ -24,7 +24,7 @@ class LoginAuth{
    if (user != null){
      print("USUARIO VERIFICADO E LOGADO");
       await usuario.setDados(user.email, usuario, user.uid);
-      Navigator.pushReplacement(context, PageTransition(type: PageTransitionType.rightToLeftWithFade, child: Home(usuario: usuario)));
+      Navigator.pushReplacement(context, PageTransition(type: PageTransitionType.rightToLeftWithFade, child: Home(usuario: usuario, indexAtual: 0)));
       
       
 
@@ -44,7 +44,7 @@ fazerLogin(Usuario usuario, context){
       FirebaseUser user = await auth.currentUser();
       await usuario.setDados(user.email, usuario, user.uid);
       failure.loadingClose(context);
-      Navigator.pushReplacement(context, PageTransition(type: PageTransitionType.rightToLeftWithFade, child: Home(usuario: usuario)));
+      Navigator.pushReplacement(context, PageTransition(type: PageTransitionType.rightToLeftWithFade, child: Home(usuario: usuario, indexAtual: 0,)));
 
     }).catchError((e){
           failure.loadingClose(context);

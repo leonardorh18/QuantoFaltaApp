@@ -90,8 +90,9 @@ class _MateriasState extends State<Materias> {
                           Text(materia.nome, style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, color: Colors.blueAccent),),
                           SizedBox(height: 10,),
                           Text("Você tem "+materia.avaliacoes.length.toString() + qntdAv + " nessa matéria", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.grey[700]),),
-
+                          SizedBox(height: 10,),
                         ],
+                      
                       ),
                   ))
                   );

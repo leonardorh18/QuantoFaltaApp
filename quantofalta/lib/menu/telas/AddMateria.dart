@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:numberpicker/numberpicker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:quantofalta/cadastro/Cadastro.dart';
 import 'package:quantofalta/error_treatment/failure.dart';
@@ -26,6 +27,7 @@ class _AddMateriaState extends State<AddMateria> {
 
   final nomeMateria = TextEditingController();
   final qtdNotas = TextEditingController();
+  int qntd = 1;
   TextEditingController codigo = TextEditingController();
   Failure f = Failure();
   @override
@@ -166,6 +168,19 @@ showDialog(
   
 
 }
+bool materiaExiste(String codigo){
+  bool exist = false;
+  widget.usuario.materias.forEach((element) { 
+      print(" ------------ MATERIA ID "+ element.id);
+      print("---------------- CODIGO "+ codigo);
+      print(" ------------ MATERIA SHARE_ID "+ element.share_id);
+    if (element.id == codigo || element.share_id == codigo){
+      print("--------------- ja tem essa materia");
+      exist = true;
+    }
+  });
+  return exist;
+}
 showCodDialog() {
 
 showDialog(
@@ -201,9 +216,15 @@ showDialog(
                   child: Text("Adicionar"),
                    onPressed: ()  async {
                      f.loading(context);
+                     if (!materiaExiste(codigo.text.trim())){
                       bool result = await widget.usuario.addMateriaCodigo(codigo.text.trim());
                       result ? f.toastError("Materia cadastrada com sucesso"): f.toastError("Nao foi possivel inserir essa materia");
                       Navigator.of(context).pop();
+                     } else {
+                       f.toastError("Você ja possui essa matéria.");
+                       Navigator.of(context).pop();
+                     }
+
                      },
                 )
               ],
@@ -215,8 +236,9 @@ showDialog(
 }
 
     return Container(
-       child: Column(
+       child: SingleChildScrollView(
 
+       child: Column(
          children: [
 
           Padding(
@@ -246,27 +268,32 @@ showDialog(
                         ),
 
                         SizedBox(
-                          height: 30,
+                          height: 50,
                         ),
-                        SizedBox(
+                        Center(child:Text("Quantidade de avaliações", style: TextStyle(color: Colors.blue[800], fontSize: 20, fontWeight: FontWeight.w300),)),
+                        Center(child:SizedBox(
                           width: 200,
-                          child: TextField(
-                          obscureText: false,
-                          keyboardType:  TextInputType.number,
-                          controller: qtdNotas,
-                          decoration: InputDecoration(
-                            suffixIcon: Icon(Icons.note),
-                            filled: true,
-                            fillColor: Colors.white,
-                              contentPadding: EdgeInsets.fromLTRB(5.0, 15.0, 20.0, 10.0),
-                              hintText: "Avaliações",
-                              border:
-                              OutlineInputBorder(borderRadius: BorderRadius.horizontal()),
-                              helperText: "Quantidade de avaliações",
-
+                          child: NumberPicker.integer(
+                            initialValue: qntd,
+                            minValue: 1,
+                            maxValue: 20,
+                            step: 1,
+                            decoration: BoxDecoration(
+                                  border: new Border(
+                                    top: new BorderSide(
+                                      style: BorderStyle.solid,
+                                      color: Colors.blueAccent,
+                                    ),
+                                    bottom: new BorderSide(
+                                      style: BorderStyle.solid,
+                                      color: Colors.blueAccent,
+                                    ),
+                                  ),
+                                ),
+                            infiniteLoop: true,
+                            onChanged: (value) => setState(() =>  qntd = value),
                           ),
-                          ) ,
-                      ),
+                      )),
 
                         SizedBox(height: 30,),
                         Material(
@@ -277,19 +304,26 @@ showDialog(
                           minWidth: MediaQuery.of(context).size.width,
                           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                           onPressed: (){
-                            if (qtdNotas.text.trim().isEmpty){
+                            if (qntd == 0){
 
                               f.toastError("Adicone quantidade de avaliações");
+                              return;
 
                             }
-                            else if (double.parse(qtdNotas.text) <1 ){
+                            else if (qntd <1 ){
 
                                 f.toastError("Adicone quantidade de avaliações");
+                                return;
                              
-                            } else {
+                            } else if (nomeMateria.text.trim().isEmpty) {
+
+                               f.toastError("A materia precisa de um nome");
+                               return;
+
+                            }else {
                                  pesos = List<TextEditingController>();
-                                desc = List<TextEditingController>();
-                                 addPesos(int.parse(qtdNotas.text) );
+                                  desc = List<TextEditingController>();
+                                 addPesos(qntd);
                                 
 
                             }
@@ -311,9 +345,10 @@ showDialog(
                           minWidth: MediaQuery.of(context).size.width,
                           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                           onPressed: (){
-
+                         
                               showCodDialog();
-                            
+                        
+  
     
                           },
                             child: Text("Adicionar materia por codigo",
@@ -332,6 +367,7 @@ showDialog(
 
          ],
        ) ,
+      )
     );
   }
 }

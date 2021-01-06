@@ -12,8 +12,8 @@ import 'telas/EditMateria.dart';
 
 class Home extends StatefulWidget {
    Usuario usuario;
-  
-  Home({this.usuario});
+  int indexAtual = 0;
+  Home({this.usuario, this.indexAtual});
 
   @override
   _HomeState createState() => _HomeState();
@@ -21,7 +21,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
    
-  int _indexAtual = 0;
+  
 
 
   @override
@@ -43,11 +43,14 @@ class _HomeState extends State<Home> {
       AddMateria(widget.usuario),
       EditMateria(widget.usuario),
   ];
- 
+
     return Scaffold(
+      resizeToAvoidBottomInset: false, 
       appBar: AppBar(title: Text('Bem vindo, '+widget.usuario.nome, 
-            style: TextStyle(color: Colors.white),),
+            style: TextStyle(color: Colors.white),
+            ),
        backgroundColor: Colors.blue[700], 
+       automaticallyImplyLeading: false,
       iconTheme: IconThemeData(color: Colors.redAccent),
       actions: [
          Padding(
@@ -69,15 +72,15 @@ class _HomeState extends State<Home> {
       ),
       body: Column(children: [
 
-          listaTelas[_indexAtual]
+          listaTelas[widget.indexAtual]
       ],),
 
           bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _indexAtual,
+          currentIndex: widget.indexAtual,
           onTap: (indice){
 
             setState(() {
-              _indexAtual = indice;
+              widget.indexAtual = indice;
             }
             );
 
