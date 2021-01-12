@@ -181,59 +181,6 @@ bool materiaExiste(String codigo){
   });
   return exist;
 }
-showCodDialog() {
-
-showDialog(
-        context: context,
-        builder: (BuildContext context){
-            return AlertDialog(
-              title: Text("Digite ou cole codigo da avaliação"),
-              content:  Container( 
-                child: TextField(
-                  controller: codigo,
-                  decoration: InputDecoration(
-                    suffixIcon: Icon(Icons.edit),
-                    filled: true,
-                    fillColor: Colors.white,
-                      labelText: "Codigo",
-                      contentPadding: EdgeInsets.fromLTRB(5.0, 15.0, 20.0, 10.0),
-                      hintText: "Codigo",
-                      border:
-                      OutlineInputBorder(borderRadius: BorderRadius.horizontal()),
-                                  
-
-                  ),
-                ),
-              ),
-              actions:[
-                FlatButton(
-                  child: Text("Fechar"),
-                   onPressed: (){
-                  Navigator.of(context).pop();
-                     },
-                ),
-                FlatButton(
-                  child: Text("Adicionar"),
-                   onPressed: ()  async {
-                     f.loading(context);
-                     if (!materiaExiste(codigo.text.trim())){
-                      bool result = await widget.usuario.addMateriaCodigo(codigo.text.trim());
-                      result ? f.toastError("Materia cadastrada com sucesso"): f.toastError("Nao foi possivel inserir essa materia");
-                      Navigator.of(context).pop();
-                     } else {
-                       f.toastError("Você ja possui essa matéria.");
-                       Navigator.of(context).pop();
-                     }
-
-                     },
-                )
-              ],
-            );
-        }
-    );
-  
-
-}
 
     return Container(
        child: SingleChildScrollView(
@@ -337,26 +284,7 @@ showDialog(
                             ),
                         ),
                         SizedBox(height: 15,),
-                        Material(
-                        elevation: 5.0,
-                        borderRadius: BorderRadius.circular(30.0),
-                        color: Colors.blue[700],
-                        child: MaterialButton(
-                          minWidth: MediaQuery.of(context).size.width,
-                          padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                          onPressed: (){
-                         
-                              showCodDialog();
-                        
-  
-    
-                          },
-                            child: Text("Adicionar materia por codigo",
-                            textAlign: TextAlign.center,
 
-                            ),
-                            ),
-          )
 
                ],
               

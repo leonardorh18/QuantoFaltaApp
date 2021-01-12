@@ -177,37 +177,7 @@ class Usuario {
    
   }
 
-  Future<bool> addMateriaCodigo(String codigo) async {
-    Firestore db = Firestore.instance;
-    bool done = false;
-    DocumentSnapshot snapshot = await db.collection("materias").document(codigo).get().timeout(Duration(seconds: 5), onTimeout: (){return null;});
-    if (snapshot == null){
-      print("NAO EXISTE ------- >");
-      failure.toastError("Codigo não existe");
-      return false;
-    }
-    List<Avaliacao> listaav = tratarNpd(snapshot.data['npd'], zerarNotas: true);
-    String id = criarId();
-    this.materias.add(Materia(avaliacoes: listaav, nome: snapshot.data['nome'], id:id, share_id: codigo));
-    try {
-
-      await db.collection('materias').document(id).setData({
-      'nome' : snapshot.data['nome'],
-      'npd' : snapshot.data['npd'],
-      'user_id': this.id,
-      'share_id': codigo,
-      'id': id,
-    });
-
-    return true;
-    } catch (e){
-
-
-       return false;
-    }
-
-
-  }
+ 
 
   Map<String, dynamic> toMap(){
 

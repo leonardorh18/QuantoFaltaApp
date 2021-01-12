@@ -252,24 +252,7 @@ attAvaliacoes(Materia materia) async {
 
                             ],
                           ),
-                          Row(
-                            
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                            SizedBox(height: 40, width: 15),
-                              GestureDetector(
-                                onTap: (){
-                                  Clipboard.setData(ClipboardData(text: materia.share_id));
-                                  Failure failure = Failure();
-                                  failure.toastError(materia.share_id + " COPIADO!!");
-                                },
-                                child: Icon(Icons.copy, size: 40, color: Colors.green[700],),
-                              ),
-                            SizedBox(width: 20,),   
-                             Text("Copiar código", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),)                          
 
-
-                          ],),
                           
                           SizedBox(height: 10 ),
 
