@@ -37,7 +37,7 @@ class _MateriasState extends State<Materias> {
                                 av.nome + " | Nota: " +av.nota.toString() + " | Peso: "+ av.peso.toString(), style: TextStyle(color: Colors.grey[600], fontSize: 20),
                              ),
                               SizedBox(height: 15,),
-                              index == avaliacoes.length -1 ? Text("Media final até agora: "+ total.toString(), style: TextStyle(color: Colors.red[600], fontSize: 20)) : SizedBox(height: 5,)
+                              index == avaliacoes.length -1 ? Text("Media final até agora: "+ total.toStringAsPrecision(4), style: TextStyle(color: Colors.red[600], fontSize: 20)) : SizedBox(height: 5,)
                            ]
                            
                          );

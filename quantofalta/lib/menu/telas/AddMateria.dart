@@ -75,6 +75,7 @@ Widget contentDialog(int counter){
                               TextField(
                               obscureText: false,
                               controller: desc[index],
+                              maxLength: 30,
                               decoration: InputDecoration(
                                 suffixIcon: Icon(Icons.edit),
                                 filled: true,
@@ -102,7 +103,11 @@ bool verificaAvaliacoes(){
       f.toastError("Algum peso esta vazio");
       return false;
 
-    } else if (double.parse(pesos[index].text.trim()) <= 0){
+    } else if (desc[index].text.trim().contains(',') || (desc[index].text.trim().contains(';'))) {
+      f.toastError("Caractere não permitido (';' ou ',')");
+      return false;
+
+    }else if (double.parse(pesos[index].text.trim()) <= 0){
       f.toastError("Os pesos precisam ser maiores do que 0");
       return false;
     } else if (double.parse(pesos[index].text.trim()) > 1){
@@ -168,19 +173,6 @@ showDialog(
   
 
 }
-bool materiaExiste(String codigo){
-  bool exist = false;
-  widget.usuario.materias.forEach((element) { 
-      print(" ------------ MATERIA ID "+ element.id);
-      print("---------------- CODIGO "+ codigo);
-      print(" ------------ MATERIA SHARE_ID "+ element.share_id);
-    if (element.id == codigo || element.share_id == codigo){
-      print("--------------- ja tem essa materia");
-      exist = true;
-    }
-  });
-  return exist;
-}
 
     return Container(
        child: SingleChildScrollView(
@@ -201,6 +193,7 @@ bool materiaExiste(String codigo){
                     TextField(
                           obscureText: false,
                           controller: nomeMateria,
+                          maxLength: 30,
                           decoration: InputDecoration(
                             suffixIcon: Icon(Icons.library_books_rounded),
                             filled: true,
@@ -267,7 +260,13 @@ bool materiaExiste(String codigo){
                                f.toastError("A materia precisa de um nome");
                                return;
 
-                            }else {
+                            }else if (nomeMateria.text.trim().contains(';') || nomeMateria.text.trim().contains(',')){
+                               f.toastError("Caractere não permitido (';' ou ',')");
+                               
+                                return;
+
+                            }
+                            else {
                                  pesos = List<TextEditingController>();
                                   desc = List<TextEditingController>();
                                  addPesos(qntd);
